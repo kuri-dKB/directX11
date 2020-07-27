@@ -101,7 +101,7 @@ void CWindow::SetTitle(const std::string& title)
 	}
 }
 
-std::optional<int> CWindow::ProcessMessages()
+std::optional<int> CWindow::ProcessMessages() noexcept
 {
 	MSG msg;
 	// while queue has messages, remove and dispatch them
@@ -125,10 +125,14 @@ std::optional<int> CWindow::ProcessMessages()
 
 CGraphics& CWindow::Gfx()
 {
+	if (!m_pGfx)
+	{
+		throw CHWND_NOGFX_EXCEPT();
+	}
 	return *m_pGfx;
 }
 
-LRESULT WINAPI CWindow::HandleMsgSetUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CWindow::HandleMsgSetUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// CreateWindow()から渡された引数を使ってウィンドウクラスのポインタを格納
 	if (msg == WM_NCCREATE)
@@ -147,7 +151,7 @@ LRESULT WINAPI CWindow::HandleMsgSetUp(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT WINAPI CWindow::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CWindow::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// retrieve ptr to window class
 	CWindow* const pWnd = reinterpret_cast<CWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -159,6 +163,8 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 {
 	switch (msg)
 	{
+	// we don't want the DefProc to handle this message because
+	// we want our destructor to destoroy the window, so return 0 instead of break
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
@@ -169,9 +175,9 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 
 		//---------- KEYBOARD MESSAGES
 	case WM_KEYDOWN:
-		// syskey commads need to be handle to track ALT key
+		// syskey commads need to be handle to track ALT key (VK_MENU) and F10
 	case WM_SYSKEYDOWN:
-		if (!(lParam & 0x40000000) || m_kbd.AutorepeatIsEnabled())
+		if (!(lParam & 0x40000000) || m_kbd.AutorepeatIsEnabled()) // filter autorepeat
 		{
 			m_kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
 		}
@@ -213,7 +219,6 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 				m_mouse.OnMouseLeave();
 			}
 		}
-		
 		break;
 	}
 	case WM_LBUTTONDOWN:
@@ -253,32 +258,11 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 }
 
 // Window Exception Stuff
-CWindow::CException::CException(int line, const char* file, HRESULT hr) noexcept
-	:
-	CChiliException(line, file),
-	m_hr(hr)
-{}
-
-const char* CWindow::CException::what() const noexcept
-{
-	std::ostringstream oss;
-	oss << GetType() << std::endl
-		<< "[Error Code] " << GetErrorCode() << std::endl
-		<< "[Description] " << GetErrorString() << std::endl
-		<< GetOriginString();
-	m_whatBuffer = oss.str();
-	return m_whatBuffer.c_str();
-}
-
-const char* CWindow::CException::GetType() const noexcept
-{
-	return "Chili Window Exception";
-}
-
 std::string CWindow::CException::TranslateErrorCode(HRESULT hr) noexcept
 {
 	char* pMsgBuf = nullptr;
-	DWORD nMsgLen = FormatMessage(
+	// window will allocate memory for err string and make our pointer point to it
+	const DWORD nMsgLen = FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -295,12 +279,40 @@ std::string CWindow::CException::TranslateErrorCode(HRESULT hr) noexcept
 	return errorString;
 }
 
-HRESULT CWindow::CException::GetErrorCode() const noexcept
+CWindow::CHrException::CHrException(int line, const char* file, HRESULT hr) noexcept
+	:
+	CException(line, file),
+	hr(hr)
+{}
+
+const char* CWindow::CHrException::what() const noexcept
 {
-	return m_hr;
+	std::ostringstream oss;
+	oss << GetType() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
+		<< GetOriginString();
+	m_whatBuffer = oss.str();
+	return m_whatBuffer.c_str();
 }
 
-std::string CWindow::CException::GetErrorString() const noexcept
+const char* CWindow::CHrException::GetType() const noexcept
 {
-	return TranslateErrorCode(m_hr);
+	return "Chili Window Exception";
+}
+
+HRESULT CWindow::CHrException::GetErrorCode() const noexcept
+{
+	return hr;
+}
+
+std::string CWindow::CHrException::GetErrorDescription() const noexcept
+{
+	return CException::TranslateErrorCode(hr);
+}
+
+const char* CWindow::NoGfxException::GetType() const noexcept
+{
+	return "Chili Window Exception [No Graphics]";
 }

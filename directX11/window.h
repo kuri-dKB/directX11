@@ -18,15 +18,26 @@ class CWindow
 public:
 	class CException : public CChiliException
 	{
+		using CChiliException::CChiliException;
 	public:
-		CException(int line, const char* file, HRESULT hr) noexcept;
-		const char* what() const noexcept override;
-		virtual const char* GetType() const noexcept;
 		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+	};
+	class CHrException :public CException
+	{
+	public:
+		CHrException(int line, const char* file, HRESULT hr) noexcept;
+		const char* what() const noexcept override;
+		const char* GetType() const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
-		std::string GetErrorString() const noexcept;
+		std::string GetErrorDescription() const noexcept;
 	private:
-		HRESULT m_hr;
+		HRESULT hr;
+	};
+	class NoGfxException : public CException
+	{
+	public:
+		using CException::CException;
+		const char* GetType() const noexcept override;
 	};
 private:
 	// ƒVƒ“ƒOƒ‹ƒgƒ“
@@ -50,7 +61,7 @@ public:
 	CWindow(const CWindow&) = delete;
 	CWindow& operator=(const CWindow&) = delete;
 	void SetTitle(const std::string& title);
-	static std::optional<int> ProcessMessages();
+	static std::optional<int> ProcessMessages() noexcept;
 	CGraphics& Gfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -68,5 +79,6 @@ private:
 
 
 // error exception helper macro
-#define CHWND_EXCEPT(hr) CWindow::CException(__LINE__,__FILE__,hr)
-#define CHWND_LAST_EXCEPT() CWindow::CException(__LINE__,__FILE__,GetLastError())
+#define CHWND_EXCEPT(hr) CWindow::CHrException(__LINE__,__FILE__,(hr))
+#define CHWND_LAST_EXCEPT() CWindow::CHrException(__LINE__,__FILE__,GetLastError())
+#define CHWND_NOGFX_EXCEPT() CWindow::NoGfxException(__LINE__,__FILE__)
