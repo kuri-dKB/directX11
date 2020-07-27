@@ -27,6 +27,16 @@ public:
 		HRESULT m_hr;
 		std::string m_info;
 	};
+	class CInfoException : public CException
+	{
+	public:
+		CInfoException(int line, const char* file, std::vector<std::string> infoMsgs = {}) noexcept;
+		const char* what() const noexcept override;
+		const char* GetType() const noexcept override;
+		std::string GetErrorInfo() const noexcept;
+	private:
+		std::string m_info;
+	};
 	class CDeviceRemovedException : public CHrException
 	{
 		using CHrException::CHrException;
@@ -42,6 +52,7 @@ public:
 	~CGraphics() = default;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue) noexcept;
+	void DrawTextTriangle();
 private:
 #ifndef NDEBUG
 	CDxgiInfoManager m_infoManager;
