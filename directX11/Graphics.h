@@ -2,6 +2,7 @@
 #include "ChiliWin.h"
 #include "ChiliException.h"
 #include <d3d11.h>
+#include <wrl.h>
 #include <vector>
 #include "DxgiInfoManager.h"
 
@@ -38,16 +39,15 @@ public:
 	CGraphics(HWND hWnd);
 	CGraphics(const CGraphics&) = delete;
 	CGraphics& operator=(const CGraphics&) = delete;
-	~CGraphics();
+	~CGraphics() = default;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue) noexcept;
 private:
 #ifndef NDEBUG
 	CDxgiInfoManager m_infoManager;
 #endif // !NDEBUG
-
-	ID3D11Device* m_pDevice = nullptr;
-	IDXGISwapChain* m_pSwap = nullptr;
-	ID3D11DeviceContext* m_pContext = nullptr;
-	ID3D11RenderTargetView* m_pTarget = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device>           m_pDevice;
+	Microsoft::WRL::ComPtr<IDXGISwapChain>         m_pSwap;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext>    m_pContext;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_pTarget;
 };
