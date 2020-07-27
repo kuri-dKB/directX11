@@ -1,0 +1,59 @@
+# l i n e   1 " C : \ \ U s e r s \ \ f[!h(u\ \ s o u r c e \ \ r e p o s \ \ d i r e c t X 1 1 \ \ d i r e c t X 1 1 \ \ d i r e c t X 1 1 . r c "  
+ # l i n e   1  
+ / /   M i c r o s o f t   V i s u a l   C + +   g0ubU0・_0・ｽ0・ｹ0  ｹ0ｯ0・ﾗ0ﾈ0g0Y00 
+ / /  
+ # i n c l u d e   " r e s o u r c e . h "  
+ # l i n e   5  
+ # d e f i n e   A P S T U D I O _ R E A D O N L Y _ S Y M B O L S  
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ / /  
+ / /   T E X T I N C L U D E   2   ・ｽ0・ｹ0K0・ubU0・~0W0_00 
+ / /  
+ # i n c l u d e   " w i n r e s . h "  
+ # l i n e   1 2  
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ # u n d e f   A P S T U D I O _ R E A D O N L Y _ S Y M B O L S  
+ # l i n e   1 5  
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ / /   蘰,g條  ( 蘰,g)   ・ｽ0・ｹ0 
+ # l i n e   1 8  
+ # i f   ! d e f i n e d ( A F X _ R E S O U R C E _ D L L )   | |   d e f i n e d ( A F X _ T A R G _ E N U )  
+ L A N G U A G E   1 7 ,   1  
+ # l i n e   2 1  
+ # i f d e f   A P S T U D I O _ I N V O K E D  
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ / /  
+ / /   T E X T I N C L U D E  
+ / /  
+ # l i n e   2 7  
+ 1   T E X T I N C L U D E  
+ B E G I N  
+ " r e s o u r c e . h \ 0 "  
+ E N D  
+ # l i n e   3 2  
+ 2   T E X T I N C L U D E      
+ B E G I N  
+ " # i n c l u d e   " " w i n r e s . h " " \ r \ n "  
+ " \ 0 "  
+ E N D  
+ # l i n e   3 8  
+ 3   T E X T I N C L U D E      
+ B E G I N  
+ " \ r \ n "  
+ " \ 0 "  
+ E N D  
+ # l i n e   4 4  
+ # e n d i f         / /   A P S T U D I O _ I N V O K E D  
+ # l i n e   4 6  
+ # e n d i f         / /   蘰,g條  ( 蘰,g)   ・ｽ0・ｹ0 
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ # l i n e   5 1  
+ # i f n d e f   A P S T U D I O _ I N V O K E D  
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ / /  
+ / /   T E X T I N C L U D E   3   ・ｽ0・ｹ0K0・ubU0・~0W0_00 
+ / /  
+ # l i n e   5 8  
+ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /  
+ # e n d i f         / /   A P S T U D I O _ I N V O K E D   g0j0D04XT 
+ 
