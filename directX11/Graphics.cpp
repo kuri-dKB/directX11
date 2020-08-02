@@ -8,6 +8,7 @@
 #include "dxerr.h"
 #include <sstream>
 #include <d3dcompiler.h>
+#include <cmath>
 
 namespace wrl = Microsoft::WRL;
 
@@ -104,9 +105,8 @@ void CGraphics::ClearBuffer(float red, float green, float blue) noexcept
 	m_pContext->ClearRenderTargetView(m_pTarget.Get(), color);
 }
 
-void CGraphics::DrawTextTriangle()
+void CGraphics::DrawTextTriangle(float angle)
 {
-	namespace wrl = Microsoft::WRL;
 	HRESULT hr;
 
 	struct Vertex
@@ -125,10 +125,10 @@ void CGraphics::DrawTextTriangle()
 		}color;
 	};
 
-	// 頂点バッファの作成(三角形)
+	// 頂点バッファの作成
 	Vertex vertices[] =
 	{
-		{ 0.0f,  0.5f, 255, 0, 0, 0 },
+		{ 0.0f, 0.5f, 255, 0, 0, 0 },
 		{ 0.5f, -0.5f, 0, 255, 0, 0 },
 		{ -0.5f, -0.5f, 0, 0, 255, 0 },
 		{ -0.3f, 0.3f, 0, 255, 0, 0 },
@@ -148,6 +148,12 @@ void CGraphics::DrawTextTriangle()
 	D3D11_SUBRESOURCE_DATA sd = {};
 	sd.pSysMem = vertices;
 	GFX_THROW_INFO(m_pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
+
+	// 頂点バッファをセット
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	m_pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
 
 	// インデックスバッファ作成
 	const unsigned short indices[] =
@@ -172,10 +178,38 @@ void CGraphics::DrawTextTriangle()
 	// インデックスバッファをセット
 	m_pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
 
-	// 頂点バッファをセット
-	const UINT stride = sizeof(Vertex);
-	const UINT offset = 0u;
-	m_pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	// コンスタントバッファ作成
+	struct ConstantBuffer
+	{
+		struct
+		{
+			float element[4][4];
+		} transformation;
+	};
+	const ConstantBuffer cb =
+	{
+		{
+			(3.0f / 4.0f) * std::cos(angle),	std::sin(angle),	0.0f,	0.0f,
+			(3.0f / 4.0f) * -std::sin(angle),	std::cos(angle),	0.0f,	0.0f,
+			0.0f,				                0.0f,				1.0f,	0.0f,
+			0.0f,			                    0.0f,				0.0f,	1.0f,
+		}
+	};
+	wrl::ComPtr<ID3D11Buffer> pConstantBuffer;
+	D3D11_BUFFER_DESC cbd;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.Usage = D3D11_USAGE_DYNAMIC;
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(cb);
+	cbd.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &cb;
+	GFX_THROW_INFO(m_pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
+
+	// コンスタントバッファセット
+	m_pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
 
 
 	// ピクセルシェーダーの作成
