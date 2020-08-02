@@ -1,3 +1,10 @@
+//========================================================================
+// Keyboard.h
+// キーボード操作
+//
+// 更新日：2020/07/30
+// 栗城 達也
+//========================================================================
 #pragma once
 #include <queue>
 #include <bitset>
@@ -11,22 +18,22 @@ public:
 	{
 	public:
 		enum class Type
-		{
+		{ // イベントタイプ
 			Press,
 			Release,
 			Invalid
 		};
 	private:
 		Type type;
-		unsigned char code;
+		unsigned char code;  
 	public:
 		CEvent()
-			:
+			: // 初期値
 			type(Type::Invalid),
 			code(0u)
 		{}
 		CEvent(Type type, unsigned char code) noexcept
-			:
+			: // 初期値
 			type(type),
 			code(code)
 		{}
@@ -47,17 +54,17 @@ public:
 	CKeyboard() = default;
 	CKeyboard(const CKeyboard&) = delete;
 	CKeyboard& operator = (const CKeyboard&) = delete;
-	// key event stuff
+	// キー操作
 	bool KeyIsPressed(unsigned char keycode) const noexcept;
 	CEvent ReadKey() noexcept;
 	bool   KeyIsEmpty() const noexcept;
-	void   FlushKey() noexcept;
-	// char event stuff
+	void   FlushKey() noexcept; // key bufferをきれいに
+	// 文字列
 	char ReadChar() noexcept;
 	bool CharIsEmpty() const noexcept;
-	void FlushChar() noexcept;
-	void Flush() noexcept;
-	// autorepeat control
+	void FlushChar() noexcept; // char bufferをきれいに
+	void Flush() noexcept;     // keyとcharのバッファをきれいに
+	// リピート制御
 	void EnableAutorepeat() noexcept;
 	void DisableAutorepeat() noexcept;
 	bool AutorepeatIsEnabled() const noexcept;

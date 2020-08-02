@@ -1,3 +1,10 @@
+//========================================================================
+// App.h
+// メイン処理
+//
+// 更新日：2020/08/02
+// 栗城 達也
+//========================================================================
 #include "App.h"
 #include <sstream>
 #include <iomanip>
@@ -11,10 +18,10 @@ int CApp::Go()
 {
 	while(true)
 	{
-		// process all messages pending, but to not block
+		// 保留中のすべてのメッセージを処理する
 		if (const auto ecode = CWindow::ProcessMessages())
 		{
-			// if return optional has value, means we're
+			// return optionalに値があれば終了->returnする
 			return *ecode;
 		}
 		DoFrame();

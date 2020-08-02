@@ -1,3 +1,10 @@
+//========================================================================
+// DxgiInfoManager.cpp
+// dxgiの管理
+//
+// 更新日：2020/08/02
+// 栗城 達也
+//========================================================================
 #include "DxgiInfoManager.h"
 #include "window.h"
 #include "Graphics.h"
@@ -10,17 +17,17 @@
 
 CDxgiInfoManager::CDxgiInfoManager()
 {
-	// define function signature of DXGIGetDebugInterface
+	// DXGIGetDebugInterfaceのシグネチャを定義
 	typedef HRESULT(WINAPI* DXGIGetDebugInterface)(REFIID, void**);
 
-	// load the dll that contains the function DXGIGetDebugInterface
+	// DXGIGetDebugInterface()を含むdllをロード
 	const auto hModDxgiDebug = LoadLibraryEx("dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
 	if (hModDxgiDebug == nullptr)
 	{
 		throw CHWND_LAST_EXCEPT();
 	}
 
-	// get address of DXGIGetDebugInterface in dll
+	// dllでDXGIGetDebugInterface()のアドレスを取得
 	const auto DxgiGetDebugInterface = reinterpret_cast<DXGIGetDebugInterface>(
 		reinterpret_cast<void*>(GetProcAddress(hModDxgiDebug, "DXGIGetDebugInterface"))
 		);
@@ -35,8 +42,7 @@ CDxgiInfoManager::CDxgiInfoManager()
 
 void CDxgiInfoManager::Set() noexcept
 {
-	// set the index (m_next) so that the next all to GetMessages()
-	// will only get errors generated after this call
+	// エラーを取得するようインデックス(m_next)を設定
 	m_next = m_pDxgiInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
@@ -48,12 +54,12 @@ std::vector<std::string> CDxgiInfoManager::GetMessages() const
 	{
 		HRESULT hr;
 		SIZE_T messageLength;
-		// get the size of message i in bytes
+		// i のサイズをバイト数で取得
 		GFX_THROW_NOINFO(m_pDxgiInfoQueue->GetMessage(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
-		// allocate memory for message
+		// メッセージ用のメモリを割り当てる
 		auto bytes = std::make_unique<byte[]>(messageLength);
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
-		// get the message and push its description into the vector
+		// メッセージを取得してベクトルにプッシュする
 		GFX_THROW_NOINFO(m_pDxgiInfoQueue->GetMessage(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
 		messages.emplace_back(pMessage->pDescription);
 	}

@@ -1,7 +1,8 @@
 //========================================================================
 // mouse.h
-// マウス操作(左右クリック、ホイール対応)
+// マウス操作
 //
+// 更新日：2020/07/28
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -15,7 +16,7 @@ public:
 	{
 	public:
 		enum class Type
-		{
+		{// イベントタイプ
 			LPress,
 			LRelease,
 			RPress,
@@ -25,17 +26,17 @@ public:
 			Move,
 			Enter,
 			Leave,
-			Invalid
+			Invalid 
 		};
 	private:
 		Type type;
-		bool leftIsPressed;
-		bool rightIsPressed;
-		int x;
+		bool leftIsPressed;  // クリックの判定
+		bool rightIsPressed; //
+		int x; // 座標
 		int y;
 	public:
 		CEvent() noexcept
-			:
+			: // 初期値
 			type(Type::Invalid),
 			leftIsPressed(false),
 			rightIsPressed(false),
@@ -43,7 +44,7 @@ public:
 			y(0)
 		{}
 		CEvent(Type type, const CMouse& parent) noexcept
-			:
+			: // 初期値
 			type(type),
 			leftIsPressed(parent.m_leftIsPressed),
 			rightIsPressed(parent.m_rightIsPressed),
@@ -81,9 +82,9 @@ public:
 	};
 public:
 	CMouse() = default;
-	CMouse(const CMouse&) = delete;
-	CMouse& operator=(const CMouse&) = delete;
-	std::pair<int, int> GetPos() const noexcept;
+	CMouse(const CMouse&) = delete;            // 禁止
+	CMouse& operator=(const CMouse&) = delete; // 禁止
+	std::pair<int, int> GetPos() const noexcept; // std::pair ２つの要素を入れられる (x,y)
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
 	bool IsInWindow() const noexcept;
@@ -94,8 +95,9 @@ public:
 	{
 		return m_buffer.empty();
 	}
-	void Flush() noexcept;
+	void Flush() noexcept; // 初期、もとに戻す
 private:
+	// マウスの状態
 	void OnMouseMove(int x, int y) noexcept;
 	void OnMouseLeave() noexcept;
 	void OnMouseEnter() noexcept;
@@ -105,10 +107,10 @@ private:
 	void OnRightReleased(int x, int y) noexcept;
 	void OnWheelUp(int x, int y) noexcept;
 	void OnWheelDown(int x, int y) noexcept;
-	void TrimBuffer() noexcept;
+	void TrimBuffer() noexcept; // バッファのトリミング
 	void OnWheelDelta(int x, int y, int delta) noexcept;
 private:
-	static constexpr unsigned int m_bufferSize = 16u;
+	static constexpr unsigned int m_bufferSize = 16u; // "数字u"は符号なし整数の意   constexpr -> https://docs.microsoft.com/ja-jp/cpp/cpp/constexpr-cpp?view=vs-2019
 	int  m_x;
 	int  m_y;
 	bool m_leftIsPressed = false;

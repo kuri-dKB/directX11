@@ -1,10 +1,16 @@
+//========================================================================
+// WindowsMessageMap.cpp
+//
+// 更新日：2020/07/28
+// 栗城 達也
+//========================================================================
 #include "WindowsMessageMap.h"
 #include <Windows.h>
 #include <string>
 #include <sstream>
 #include <iomanip>
 
-// secret messages
+// セレクトメッセージ
 #define WM_UAHDESTROYWINDOW 0x0090
 #define WM_UAHDRAWMENU 0x0091
 #define WM_UAHDRAWMENUITEM 0x0092

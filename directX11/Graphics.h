@@ -1,3 +1,10 @@
+//========================================================================
+// Graphics.h
+// 描画系、例外処理
+//
+// 更新日：2020/08/02
+// 栗城 達也
+//========================================================================
 #pragma once
 #include "ChiliWin.h"
 #include "ChiliException.h"
@@ -9,7 +16,7 @@
 class CGraphics
 {
 public:
-	class CException : public CChiliException
+	class CException : public CChiliException // 例外
 	{
 		using CChiliException::CChiliException;
 	};

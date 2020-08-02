@@ -1,7 +1,7 @@
 //========================================================================
 // mouse.cpp
 // 
-//
+// 更新日：2020/07/28
 // 栗城 達也
 //========================================================================
 
@@ -20,12 +20,11 @@ int CMouse::GetPosX() const noexcept
 
 int CMouse::GetPosY() const noexcept
 {
-	FAILED(69);
 	return m_y;
 }
 
 bool CMouse::IsInWindow() const noexcept
-{
+{ // ウィンドウ内にいるか
 	return m_isInWindow;
 }
 
@@ -136,7 +135,7 @@ void CMouse::TrimBuffer() noexcept
 void CMouse::OnWheelDelta(int x, int y, int delta) noexcept
 {
 	m_wheelDeltaCarry += delta;
-	// generate events for every 120
+	// 120回ごとにイベントを発生
 	while (m_wheelDeltaCarry >= WHEEL_DELTA)
 	{
 		m_wheelDeltaCarry -= WHEEL_DELTA;

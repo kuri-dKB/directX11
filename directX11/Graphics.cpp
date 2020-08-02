@@ -1,3 +1,9 @@
+//========================================================================
+// Graphics.cpp
+//
+// 更新日：2020/08/02
+// 栗城 達也
+//========================================================================
 #include "Graphics.h"
 #include "dxerr.h"
 #include <sstream>
@@ -8,7 +14,7 @@ namespace wrl = Microsoft::WRL;
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-// graphics exception checking/throwing macros (some with dxgi infos)
+// グラフィックの例外チェック・マクロ(一部dxgi)
 #define GFX_EXCEPT_NOINFO(hr) CGraphics::CHrException(__LINE__,__FILE__,(hr))
 #define GXF_THROW_NOINFO(hrcall) if(FAILED(hr = (hrcall))) throw CGraphics::CHrException(__LINE__,__FILE__,hr)
 
@@ -49,10 +55,10 @@ CGraphics::CGraphics(HWND hWnd)
 	swapCreateFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif // !NDEBUG
 
-	// for checking results of d3d functions
+	// d3dの結果をチェックする用
 	HRESULT hr;
 
-	// create device and front/back buffers, and swap chain and rendering context
+	// デバイス、フロント・バックバッファ、スワップチェーン、コンテキストの作成
 	GFX_THROW_INFO(D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -67,7 +73,7 @@ CGraphics::CGraphics(HWND hWnd)
 		nullptr,
 		&m_pContext
 	));
-	// gain access to texture subresource in swap chain (back buffer)
+	// スワップチェーン(バックバッファ)のテクスチャサブリソースへのパスをとる
 	wrl::ComPtr<ID3D11Resource> pBackBuffer;
 	GFX_THROW_INFO(m_pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_pTarget));
@@ -109,7 +115,7 @@ void CGraphics::DrawTextTriangle()
 		float y;
 	};
 
-	// create vertex buffer (1 2d triangle at center of screen)
+	// 頂点バッファの作成(三角形)
 	const Vertex vertices[] =
 	{
 		{ 0.0f,  0.5f },
@@ -129,32 +135,32 @@ void CGraphics::DrawTextTriangle()
 	sd.pSysMem = vertices;
 	GFX_THROW_INFO(m_pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
 
-	// bind vertex buffer to pipeline
+	// 頂点バッファをセット
 	const UINT stride = sizeof(Vertex);
 	const UINT offset = 0u;
 	m_pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 
 
-	// create pixel shader
+	// ピクセルシェーダーの作成
 	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
 	wrl::ComPtr<ID3DBlob> pBlob;
 	GFX_THROW_INFO(D3DReadFileToBlob(L"PixcelShader.cso", &pBlob));
 	GFX_THROW_INFO(m_pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
 
-	// bind pixel shader
+	// セット
 	m_pContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 
 
-	// create vertex shader
+	// バーテックスシェーダーの作成
 	wrl::ComPtr<ID3D11VertexShader> pVertexShader;
 	GFX_THROW_INFO(D3DReadFileToBlob(L"VertexShader.cso", &pBlob));
 	GFX_THROW_INFO(m_pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
 
-	// bind vertex shader
+	// セット
 	m_pContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
 
 
-	// input (vertex) layout (2d position only)
+	// インプットレイアウト(２D位置のみ)
 	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
@@ -167,19 +173,19 @@ void CGraphics::DrawTextTriangle()
 		&pInputLayout
 	));
 
-	// bind vertex layout
+	// セット
 	m_pContext->IASetInputLayout(pInputLayout.Get());
 
 
-	// bind render target
+	// レンダーターゲットをセット
 	m_pContext->OMSetRenderTargets(1u, m_pTarget.GetAddressOf(), nullptr);
 
 
-	// Set primitive topology to triangle list
+	// プリミティブ設定をトライアングルリストにセット
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
-	// configure viewport
+	// ビューポートの設定
 	D3D11_VIEWPORT vp;
 	vp.Width = 800;
 	vp.Height = 600;
@@ -193,19 +199,19 @@ void CGraphics::DrawTextTriangle()
 }
 
 
-// Graphics exception stuff
+// 例外処理
 CGraphics::CHrException::CHrException(int line, const char * file, HRESULT hr, std::vector<std::string> infoMsgs) noexcept
 	:
 	CException(line, file),
 	m_hr(hr)
 {
-	// join all info messages with newlines into single string
+	// 全ての infoMsgs を改行して m_infoに入れる
 	for (const auto& m : infoMsgs)
 	{
 		m_info += m;
 		m_info.push_back('\n');
 	}
-	// remove final newline if exists
+	// 最後の改行を削除
 	if (!m_info.empty())
 	{
 		m_info.pop_back();
@@ -265,13 +271,13 @@ CGraphics::CInfoException::CInfoException(int line, const char * file, std::vect
 	:
 	CException(line, file)
 {
-	// join all info messages with newlines into single string
+	// 全ての infoMsgs を改行して m_infoに入れる
 	for (const auto& m : infoMsgs)
 	{
 		m_info += m;
 		m_info.push_back('\n');
 	}
-	// remove final newline if exists
+	// 最後の改行を削除
 	if (!m_info.empty())
 	{
 		m_info.pop_back();
