@@ -82,6 +82,41 @@ CGraphics::CGraphics(HWND hWnd)
 	GFX_THROW_INFO(m_pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_pTarget));
 	
+	// デプスステンシルステート作成
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	dsDesc.DepthEnable = TRUE;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	wrl::ComPtr<ID3D11DepthStencilState> pDSState;
+	GFX_THROW_INFO(m_pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
+
+	// セット
+	m_pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
+
+	// デプスステンシルテクスチャ作成
+	wrl::ComPtr<ID3D11Texture2D> pDepthStencil;
+	D3D11_TEXTURE2D_DESC descDepth = {};
+	descDepth.Width = 800u;
+	descDepth.Height = 600u;
+	descDepth.MipLevels = 1u;
+	descDepth.ArraySize = 1u;
+	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	descDepth.SampleDesc.Count = 1u;
+	descDepth.SampleDesc.Quality = 0u;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	GFX_THROW_INFO(m_pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
+
+	// ビュー作成
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0u;
+	GFX_THROW_INFO(m_pDevice->CreateDepthStencilView(pDepthStencil.Get(), &descDSV, &m_pDSV));
+
+	// セット
+	m_pContext->OMSetRenderTargets(1u, m_pTarget.GetAddressOf(), m_pDSV.Get());
+
 }
 
 void CGraphics::EndFrame()
@@ -107,6 +142,7 @@ void CGraphics::ClearBuffer(float red, float green, float blue) noexcept
 {
 	const float color[] = { red,green,blue,1.0f };
 	m_pContext->ClearRenderTargetView(m_pTarget.Get(), color);
+	m_pContext->ClearDepthStencilView(m_pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
 void CGraphics::DrawTextTriangle(float angle, float x, float z)
@@ -283,14 +319,10 @@ void CGraphics::DrawTextTriangle(float angle, float x, float z)
 		&pInputLayout
 	));
 
-	// セット
+	// バーテックスレイアウトセット
 	m_pContext->IASetInputLayout(pInputLayout.Get());
 
-
-	// レンダーターゲットをセット
-	m_pContext->OMSetRenderTargets(1u, m_pTarget.GetAddressOf(), nullptr);
-
-
+	
 	// プリミティブ設定をトライアングルリストにセット
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
