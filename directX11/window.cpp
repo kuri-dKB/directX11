@@ -7,6 +7,7 @@
 #include "window.h"
 #include <sstream>
 #include "resource.h"
+#include "WindowsThrowMacros.h"
 
 // ウィンドウクラス
 CWindow::CWindowClass CWindow::CWindowClass::wndClass;

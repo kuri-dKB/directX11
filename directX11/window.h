@@ -78,9 +78,3 @@ private:
 	HWND m_hWnd;
 	std::unique_ptr<CGraphics> m_pGfx; // スマートポインタ
 };
-
-
-// エラー例外のヘルパー
-#define CHWND_EXCEPT(hr) CWindow::CHrException(__LINE__,__FILE__,(hr))
-#define CHWND_LAST_EXCEPT() CWindow::CHrException(__LINE__,__FILE__,GetLastError())
-#define CHWND_NOGFX_EXCEPT() CWindow::NoGfxException(__LINE__,__FILE__)
