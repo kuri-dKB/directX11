@@ -2,7 +2,7 @@
 // Graphics.h
 // 描画系、例外処理
 //
-// 更新日：2020/08/04
+// 更新日：2020/08/07
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -12,9 +12,15 @@
 #include <wrl.h>
 #include <vector>
 #include "DxgiInfoManager.h"
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
+#include <memory>
+#include <random>
+#include "GraphicsThrowMacros.h"
 
 class CGraphics
 {
+	friend class CBindable;
 public:
 	class CException : public CChiliException // 例外
 	{
@@ -59,8 +65,11 @@ public:
 	~CGraphics() = default;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue) noexcept;
-	void DrawTextTriangle(float angle, float x, float y);
+	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
 private:
+	DirectX::XMMATRIX m_projection;
 #ifndef NDEBUG
 	CDxgiInfoManager m_infoManager;
 #endif // !NDEBUG

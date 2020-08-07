@@ -7,9 +7,11 @@
 //========================================================================
 #pragma once
 
+#define IS_DEBUG true
 // グラフィックの例外チェック・マクロ(一部dxgi)
 #define GFX_EXCEPT_NOINFO(hr) CGraphics::CHrException(__LINE__,__FILE__,(hr))
-#define GXF_THROW_NOINFO(hrcall) if(FAILED(hr = (hrcall))) throw CGraphics::CHrException(__LINE__,__FILE__,hr)
+#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw CGraphics::CHrException( __LINE__,__FILE__,hr )
+
 
 #ifndef NDEBUG
 #define GFX_EXCEPT(hr) CGraphics::CHrException( __LINE__,__FILE__,(hr),m_infoManager.GetMessages() )
@@ -22,3 +24,11 @@
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) CGraphics::CDeviceRemovedException( __LINE__,__FILE__,(hr) )
 #define GFX_THROW_INFO_ONLY(call) (call)
 #endif // !NDEBUG
+
+// infomanagerをローカルスコープにインポートするためのマクロ
+// this.GetInfoManager(CGraphics& gfx) ないとだめ
+#ifdef NDEBUG
+#define INFOMAN(gfx) HRESULT hr;
+#else
+#define INFOMAN(gfx) HRESULT hr; CDxgiInfoManager& m_infoManager = GetInfoManager((gfx))
+#endif

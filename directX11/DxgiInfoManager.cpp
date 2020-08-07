@@ -10,11 +10,11 @@
 #include "Graphics.h"
 #include <dxgidebug.h>
 #include <memory>
+#include "GraphicsThrowMacros.h"
 #include "WindowsThrowMacros.h"
 
 #pragma comment(lib, "dxguid.lib")
 
-#define GFX_THROW_NOINFO(hrcall) if(FAILED(hr = (hrcall))) throw CGraphics::CHrException(__LINE__, __FILE__, hr)
 
 CDxgiInfoManager::CDxgiInfoManager()
 {

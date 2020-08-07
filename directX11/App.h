@@ -15,9 +15,11 @@ public:
 	CApp();
 	// メッセージループ
 	int Go();
+	~CApp();
 private:
 	void DoFrame();
 private:
 	CWindow m_wnd;
 	CTimer  m_timer;
+	std::vector < std::unique_ptr<class CBox>> m_boxes;
 };
