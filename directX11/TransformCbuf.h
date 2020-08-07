@@ -16,6 +16,6 @@ public:
 	CTransformCbuf(CGraphics& gfx, const CDrawable& parent);
 	void Bind(CGraphics& gfx) noexcept override;
 private:
-	CVertexConstantBuffer<DirectX::XMMATRIX> m_vcbuf;
+	static std::unique_ptr<CVertexConstantBuffer<DirectX::XMMATRIX>> m_Vcbuf;
 	const CDrawable& m_parent;
 };

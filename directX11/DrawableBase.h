@@ -12,14 +12,14 @@
 template<class T>
 class CDrawableBase : public CDrawable
 {
-public:
-	bool IsStaticInit() const noexcept
+protected:
+	static bool IsStaticInit() noexcept
 	{
 		return !m_staticBinds.empty();
 	}
-	void AddStaticBind(std::unique_ptr<CBindable> bind) noexcept(!IS_DEBUG)
+	static void AddStaticBind(std::unique_ptr<CBindable> bind) noexcept(!IS_DEBUG)
 	{
-		assert("*Must* インデックスバッファをバインドするためにAddIndexBufferを使え！" && typeid(*bind) != typeid(CIndexBuffer));
+		assert("*Must* インデックスバッファをバインドするためにAddStaticIndexBufferを使え！" && typeid(*bind) != typeid(CIndexBuffer));
 		m_staticBinds.push_back(std::move(bind));
 	}
 	void AddStaticIndexBuffer(std::unique_ptr<CIndexBuffer> ibuf) noexcept(!IS_DEBUG)

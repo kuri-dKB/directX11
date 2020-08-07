@@ -16,7 +16,6 @@
 #include <DirectXMath.h>
 #include <memory>
 #include <random>
-#include "GraphicsThrowMacros.h"
 
 class CGraphics
 {

@@ -7,7 +7,6 @@
 //========================================================================
 #pragma once
 
-#define IS_DEBUG true
 // グラフィックの例外チェック・マクロ(一部dxgi)
 #define GFX_EXCEPT_NOINFO(hr) CGraphics::CHrException(__LINE__,__FILE__,(hr))
 #define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw CGraphics::CHrException( __LINE__,__FILE__,hr )

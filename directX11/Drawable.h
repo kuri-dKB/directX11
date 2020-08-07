@@ -21,9 +21,10 @@ public:
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw(CGraphics& gfx) const noexcept(!IS_DEBUG);
 	virtual void Update(float dt) noexcept = 0;
+	virtual ~CDrawable() = default;
+protected:
 	void AddBind(std::unique_ptr<CBindable> bind) noexcept(!IS_DEBUG);
 	void AddIndexBuffer(std::unique_ptr<class CIndexBuffer> ibuf) noexcept(!IS_DEBUG);
-	virtual ~CDrawable() = default;
 private:
 	virtual const std::vector<std::unique_ptr<CBindable>>& GetStaticBinds() const noexcept = 0;
 private:

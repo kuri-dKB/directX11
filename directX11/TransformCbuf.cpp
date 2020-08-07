@@ -9,15 +9,21 @@
 
 CTransformCbuf::CTransformCbuf(CGraphics & gfx, const CDrawable & parent)
 	:
-	m_vcbuf(gfx),
 	m_parent(parent)
-{}
+{
+	if (!m_Vcbuf)
+	{
+		m_Vcbuf = std::make_unique<CVertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
+	}
+}
 
 void CTransformCbuf::Bind(CGraphics & gfx) noexcept
 {
-	m_vcbuf.Update(gfx,
+	m_Vcbuf->Update(gfx,
 		DirectX::XMMatrixTranspose(
 			m_parent.GetTransformXM() * gfx.GetProjection()
 		));
-	m_vcbuf.Bind(gfx);
+	m_Vcbuf->Bind(gfx);
 }
+
+std::unique_ptr<CVertexConstantBuffer<DirectX::XMMATRIX>> CTransformCbuf::m_Vcbuf;
