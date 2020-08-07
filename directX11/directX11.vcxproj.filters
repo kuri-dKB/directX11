@@ -179,6 +179,9 @@
     <ClInclude Include="dxerr.h">
       <Filter>Dxerr</Filter>
     </ClInclude>
+    <ClInclude Include="DrawableBase.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="directX11.rc">

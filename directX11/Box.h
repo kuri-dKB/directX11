@@ -6,9 +6,9 @@
 // åIèÈ íBñÁ
 //========================================================================
 #pragma once
-#include "Drawable.h"
+#include "DrawableBase.h"
 
-class CBox : public CDrawable
+class CBox : public CDrawableBase<CBox>
 {
 public:
 	CBox(CGraphics& gfx, std::mt19937& rng,
