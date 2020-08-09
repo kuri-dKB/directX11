@@ -34,6 +34,9 @@
     <Filter Include="Dxerr">
       <UniqueIdentifier>{4fba2c43-f342-41c9-9895-746ff4b56b3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\ジオメトリ">
+      <UniqueIdentifier>{61933aaa-b6ef-45f2-9485-3cf425632f9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -181,6 +184,27 @@
     </ClInclude>
     <ClInclude Include="DrawableBase.h">
       <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
+    <ClInclude Include="ChiliMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>ヘッダー ファイル\ジオメトリ</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexedTriangleList.h">
+      <Filter>ヘッダー ファイル\ジオメトリ</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>ヘッダー ファイル\ジオメトリ</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>ヘッダー ファイル\ジオメトリ</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
+      <Filter>ヘッダー ファイル\ジオメトリ</Filter>
+    </ClInclude>
+    <ClInclude Include="Prism.h">
+      <Filter>ヘッダー ファイル\ジオメトリ</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@ ID3D11Device * CBindable::GetDevice(CGraphics & gfx) noexcept
 	return gfx.m_pDevice.Get();
 }
 
-CDxgiInfoManager & CBindable::GetInfoManager(CGraphics & gfx) noexcept(!IS_DEBUG)
+CDxgiInfoManager & CBindable::GetInfoManager(CGraphics & gfx) noexcept(IS_DEBUG)
 {
 #ifndef NDEBUG
 	return gfx.m_infoManager;

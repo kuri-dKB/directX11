@@ -2,12 +2,13 @@
 // Box.cpp
 // 
 //
-// 更新日：2020/08/07
+// 更新日：2020/08/09
 // 栗城 達也
 //========================================================================
 #include "Box.h"
 #include "BindableBase.h"
 #include "GraphicsThrowMacros.h"
+#include "Sphere.h"
 
 CBox::CBox(CGraphics& gfx,
 	std::mt19937& rng,
@@ -27,29 +28,17 @@ CBox::CBox(CGraphics& gfx,
 	theta(adist(rng)),
 	phi(adist(rng))
 {
+	namespace dx = DirectX;
 	if (!IsStaticInit())
 	{
 		struct Vertex
 		{
-			struct
-			{
-				float x;
-				float y;
-				float z;
-			} pos;
+			dx::XMFLOAT3 pos;
 		};
-		const std::vector<Vertex> vertices =
-		{
-			{ -1.0f,-1.0f,-1.0f },
-			{ 1.0f,-1.0f,-1.0f },
-			{ -1.0f,1.0f,-1.0f },
-			{ 1.0f,1.0f,-1.0f },
-			{ -1.0f,-1.0f,1.0f },
-			{ 1.0f,-1.0f,1.0f },
-			{ -1.0f,1.0f,1.0f },
-			{ 1.0f,1.0f,1.0f },
-		};
-		AddStaticBind(std::make_unique<CVertexBuffer>(gfx, vertices));
+		auto model = CSphere::Make<Vertex>();
+		model.Transform(dx::XMMatrixScaling(1.0, 1.0f, 1.2f));
+
+		AddStaticBind(std::make_unique<CVertexBuffer>(gfx, model.m_vertices));
 
 		auto pvs = std::make_unique<CVertexShader>(gfx, L"VertexShader.cso");
 		auto pvsbc = pvs->GetBytecode();
@@ -57,16 +46,7 @@ CBox::CBox(CGraphics& gfx,
 
 		AddStaticBind(std::make_unique<CPixelShader>(gfx, L"PixcelShader.cso"));
 
-		const std::vector<unsigned short> indices =
-		{
-			0,2,1, 2,3,1,
-			1,3,5, 3,7,5,
-			2,6,3, 3,6,7,
-			4,5,7, 4,7,6,
-			0,4,2, 2,4,6,
-			0,1,4, 1,5,4
-		};
-		AddStaticIndexBuffer(std::make_unique<CIndexBuffer>(gfx, indices));
+		AddStaticIndexBuffer(std::make_unique<CIndexBuffer>(gfx, model.m_indices));
 
 		struct ConstantBuffer2
 		{

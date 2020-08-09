@@ -16,5 +16,5 @@ public:
 protected:
 	static ID3D11DeviceContext* GetContext(CGraphics& gfx) noexcept;
 	static ID3D11Device*        GetDevice(CGraphics& gfx) noexcept;
-	static CDxgiInfoManager&    GetInfoManager(CGraphics& gfx) noexcept(!IS_DEBUG);
+	static CDxgiInfoManager&    GetInfoManager(CGraphics& gfx) noexcept(IS_DEBUG);
 };
