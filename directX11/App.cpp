@@ -17,8 +17,9 @@
 #include "GDIPlusManager.h"
 #include "imgui/imgui.h"
 
-CGDIPlusManager g_gdipm;
+namespace dx = DirectX;
 
+CGDIPlusManager g_gdipm;
 
 CApp::CApp()
 	:
@@ -77,7 +78,8 @@ CApp::CApp()
 	m_drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(m_drawables), nDrawables, f);
 
-	m_wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	m_wnd.Gfx().SetProjection(dx::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	m_wnd.Gfx().SetCamera(dx::XMMatrixTranslation(0.0f, 0.0f, 20.0f));
 }
 
 void CApp::DoFrame()

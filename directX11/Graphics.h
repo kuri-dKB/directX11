@@ -67,12 +67,15 @@ public:
 	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
+	void SetCamera(DirectX::FXMMATRIX cam) noexcept;
+	DirectX::XMMATRIX GetCamera() const noexcept;
 	void EnableImgui() noexcept;
 	void DisableImgui() noexcept;
 	bool IsImguiEnabled() const noexcept;
 private:
-	bool m_imguiEnabled = true;
 	DirectX::XMMATRIX m_projection;
+	DirectX::XMMATRIX m_camera;
+	bool m_imguiEnabled = true;
 #ifndef NDEBUG
 	CDxgiInfoManager m_infoManager;
 #endif // !NDEBUG
