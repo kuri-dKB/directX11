@@ -9,9 +9,14 @@
 #include "Melon.h"
 #include "Pyramid.h"
 #include "Box.h"
+#include "Sheet.h"
 #include <memory>
 #include <algorithm>
 #include "ChiliMath.h"
+#include "Surface.h"
+#include "GDIPlusManager.h"
+
+CGDIPlusManager g_gdipm;
 
 
 CApp::CApp()
@@ -44,6 +49,11 @@ CApp::CApp()
 					gfx, rng, adist, ddist,
 					odist, rdist, longdist, latdist
 					);
+			case 3:
+				return std::make_unique<CSheet>(
+					gfx, rng, adist, ddist,
+					odist, rdist
+					);
 			default:
 				assert(false && "ファクトリのタイプとあってないよ");
 				return {};
@@ -59,7 +69,7 @@ CApp::CApp()
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 		std::uniform_int_distribution<int> latdist{ 5,20 };
 		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,2 };
+		std::uniform_int_distribution<int> typedist{ 0,3 };
 	};
 
 	Factory f(m_wnd.Gfx());
@@ -75,7 +85,7 @@ void CApp::DoFrame()
 	m_wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
 	for (auto& d : m_drawables)
 	{
-		d->Update(dt);
+		d->Update(m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(m_wnd.Gfx());
 	}
 	m_wnd.Gfx().EndFrame();

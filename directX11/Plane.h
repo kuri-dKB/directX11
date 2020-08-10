@@ -43,7 +43,7 @@ public:
 						bottomLeft,
 						dx::XMVectorSet(float(x) * divisionSize_x, y_pos, 0.0f, 0.0f)
 					);
-					dx::XMStoreFloat3A(&vertices[i].pos, v);
+					dx::XMStoreFloat3(&vertices[i].pos, v);
 				}
 			}
 		}
@@ -60,7 +60,7 @@ public:
 				for (size_t x = 0; x < divisions_x; x++)
 				{
 					const std::array<unsigned short, 4> indexArray =
-					{ vxy2i(x, y), vxy2i(x + 1, y), vxy2i(x, y + 1), vxy2i(x + 1, y + 1) };
+					{ vxy2i(x,y),vxy2i(x + 1,y),vxy2i(x,y + 1),vxy2i(x + 1,y + 1) };
 					indices.push_back(indexArray[0]);
 					indices.push_back(indexArray[2]);
 					indices.push_back(indexArray[1]);
@@ -71,11 +71,11 @@ public:
 			}
 		}
 
-		return (std::move(vertices), std::move(indices));
+		return{ std::move(vertices),std::move(indices) };
 	}
 	template<class V>
 	static CIndexedTriangleList<V> Make()
 	{
-		return MakeTesselated(V)(1, 1);
+		return MakeTesselated<V>(1, 1);
 	}
 };

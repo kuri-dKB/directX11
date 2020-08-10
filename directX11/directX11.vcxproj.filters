@@ -108,6 +108,21 @@
     <ClCompile Include="Melon.cpp">
       <Filter>ソース ファイル\描画</Filter>
     </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GDIPlusManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ソース ファイル\バインド</Filter>
+    </ClCompile>
+    <ClCompile Include="Sampler.cpp">
+      <Filter>ソース ファイル\バインド</Filter>
+    </ClCompile>
+    <ClCompile Include="Sheet.cpp">
+      <Filter>ソース ファイル\描画</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliException.h">
@@ -218,6 +233,21 @@
     <ClInclude Include="Melon.h">
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GDIPlusManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ヘッダー ファイル\バインド</Filter>
+    </ClInclude>
+    <ClInclude Include="Sampler.h">
+      <Filter>ヘッダー ファイル\バインド</Filter>
+    </ClInclude>
+    <ClInclude Include="Sheet.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="directX11.rc">
@@ -251,6 +281,12 @@
       <Filter>シェーダー</Filter>
     </FxCompile>
     <FxCompile Include="ColorIndexVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturePS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureVS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
   </ItemGroup>

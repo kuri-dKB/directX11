@@ -16,7 +16,7 @@ namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
 
 #pragma comment(lib,"d3d11.lib")
-#pragma comment(lib, "D3DCompiler.lib")
+#pragma comment(lib,"D3DCompiler.lib")
 
 
 CGraphics::CGraphics(HWND hWnd)
