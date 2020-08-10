@@ -8,6 +8,7 @@
 #pragma once
 #include "window.h"
 #include "ChiliTimer.h"
+#include "ImguiManager.h"
 
 class CApp
 {
@@ -19,6 +20,7 @@ public:
 private:
 	void DoFrame();
 private:
+	CImguiManager m_imgui;
 	CWindow m_wnd;
 	CTimer  m_timer;
 	std::vector < std::unique_ptr<class CDrawable>> m_drawables;

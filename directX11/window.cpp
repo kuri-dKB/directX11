@@ -8,6 +8,7 @@
 #include <sstream>
 #include "resource.h"
 #include "WindowsThrowMacros.h"
+#include "imgui/imgui_impl_win32.h"
 
 // ウィンドウクラス
 CWindow::CWindowClass CWindow::CWindowClass::wndClass;
@@ -82,12 +83,15 @@ CWindow::CWindow(int width, int height, const char* name)
 	}
 	// 表示
 	ShowWindow(m_hWnd, SW_SHOWDEFAULT);
+	// ImGui win32 impl初期化
+	ImGui_ImplWin32_Init(m_hWnd);
 	// グラフィックオブジェクト作成
 	m_pGfx = std::make_unique<CGraphics>(m_hWnd);
 }
 
 CWindow::~CWindow()
 {
+	ImGui_ImplWin32_Shutdown();
 	DestroyWindow(m_hWnd); // 削除
 }
 
@@ -159,6 +163,10 @@ LRESULT CALLBACK CWindow::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPA
 
 LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
+		return true;
+	}
 	switch (msg)
 	{
 	case WM_CLOSE:

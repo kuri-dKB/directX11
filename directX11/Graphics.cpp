@@ -1,7 +1,7 @@
 //========================================================================
 // Graphics.cpp
 //
-// 更新日：2020/08/07
+// 更新日：2020/08/10
 // 栗城 達也
 //========================================================================
 #include "Graphics.h"
@@ -11,6 +11,7 @@
 #include <cmath>
 #include <DirectXMath.h>
 #include "GraphicsThrowMacros.h"
+#include "imgui/imgui_impl_dx11.h"
 
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
@@ -112,6 +113,9 @@ CGraphics::CGraphics(HWND hWnd)
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
 	m_pContext->RSSetViewports(1u, &vp);
+
+	// imgui d3d impl 初期化
+	ImGui_ImplDX11_Init(m_pDevice.Get(), m_pContext.Get());
 }
 
 void CGraphics::EndFrame()
