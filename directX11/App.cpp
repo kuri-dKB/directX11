@@ -82,16 +82,7 @@ CApp::CApp()
 
 void CApp::DoFrame()
 {
-	const auto dt = m_timer.Mark();
-
-	if (m_wnd.m_kbd.KeyIsPressed(VK_SPACE))
-	{
-		m_wnd.Gfx().DisableImgui();
-	}
-	else
-	{
-		m_wnd.Gfx().EnableImgui();
-	}
+	const auto dt = m_timer.Mark() * speed_factor;
 	m_wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 
 	for (auto& d : m_drawables)
@@ -100,10 +91,16 @@ void CApp::DoFrame()
 		d->Draw(m_wnd.Gfx());
 	}
 
-	if (show_demo_window)
+	static char buffer[1024];
+
+	// imgui window シュミレーションスピードコントローラー
+	if (ImGui::Begin("シュミレーションスピード"))
 	{
-		ImGui::ShowDemoWindow(&show_demo_window);
+		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::InputText("Butts", buffer, sizeof(buffer));
 	}
+	ImGui::End();
 
 	// present
 	m_wnd.Gfx().EndFrame();
