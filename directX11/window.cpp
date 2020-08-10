@@ -167,6 +167,8 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 	{
 		return true;
 	}
+	const auto imio = ImGui::GetIO();
+
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -181,6 +183,11 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 	case WM_KEYDOWN:
 		// ALTとF10を使うにはWM_SYSKEYDOWNを使わないとだめ、WM_KEYDOWNではできない
 	case WM_SYSKEYDOWN:
+		// imguiでキーボードを使うときこれを使わせる
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
 		if (!(lParam & 0x40000000) || m_kbd.AutorepeatIsEnabled()) // 自動で繰り返す
 		{
 			m_kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
@@ -188,9 +195,19 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 		break;
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
+		// imguiでキーボードを使うときこれを使わせる
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
 		m_kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
 		break;
 	case WM_CHAR:
+		// imguiでキーボードを使うときこれを使わせる
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
 		m_kbd.OnChar(static_cast<unsigned char>(wParam));
 		break;
 		//---------- END KEYBOARD MESSAGE ----------//
@@ -198,6 +215,11 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 		//---------- MOUSE MESSAGES ----------//
 	case WM_MOUSEMOVE:
 	{
+		// imguiでマウスを使うときこれを使わせる
+		if (imio.WantCaptureMouse)
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		// クライアント領域にあるとき -> マウスの移動とキャプチャ、イベント記録
 		if (pt.x >= 0 && pt.x < m_width && pt.y >= 0 && pt.y < m_height)
@@ -227,18 +249,35 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 	}
 	case WM_LBUTTONDOWN:
 	{
+		SetForegroundWindow(m_hWnd);
+		// imguiでマウスを使うときこれを使わせる
+		if (imio.WantCaptureMouse)
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		m_mouse.OnLeftPressed(pt.x, pt.y);
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
+		// imguiでマウスを使うときこれを使わせる
+		if (imio.WantCaptureMouse)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		m_mouse.OnRightPressed(pt.x, pt.y);
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
+		// imguiでマウスを使うときこれを使わせる
+		if (imio.WantCaptureMouse)
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		m_mouse.OnLeftReleased(pt.x, pt.y);
 		// ウィンドウの外に出たとき リリース
@@ -251,6 +290,11 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 	}
 	case WM_RBUTTONUP:
 	{
+		// imguiでマウスを使うときこれを使わせる
+		if (imio.WantCaptureMouse)
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		m_mouse.OnRightReleased(pt.x, pt.y);
 		// ウィンドウの外に出たとき リリース
@@ -263,6 +307,11 @@ LRESULT CWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) no
 	}
 	case WM_MOUSEWHEEL:
 	{
+		// imguiでマウスを使うときこれを使わせる
+		if (imio.WantCaptureMouse)
+		{
+			break;
+		}
 		const POINTS pt = MAKEPOINTS(lParam);
 		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 		m_mouse.OnWheelDelta(pt.x, pt.y, delta);
