@@ -2,7 +2,7 @@
 // App.h
 // メイン処理
 //
-// 更新日：2020/08/02
+// 更新日：2020/08/09
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -21,5 +21,6 @@ private:
 private:
 	CWindow m_wnd;
 	CTimer  m_timer;
-	std::vector < std::unique_ptr<class CBox>> m_boxes;
+	std::vector < std::unique_ptr<class CDrawable>> m_drawables;
+	static constexpr size_t nDrawables = 180; // モデルの個数
 };

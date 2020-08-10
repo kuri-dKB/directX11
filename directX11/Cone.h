@@ -1,10 +1,3 @@
-//========================================================================
-// Cone.h
-// 
-//
-// 更新日：2020/08/09
-// 栗城 達也
-//========================================================================
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
@@ -22,7 +15,7 @@ public:
 		const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
-		// ベース頂点
+		// base vertices
 		std::vector<V> vertices;
 		for (int iLong = 0; iLong < longDiv; iLong++)
 		{
@@ -33,34 +26,34 @@ public:
 			);
 			dx::XMStoreFloat3(&vertices.back().pos, v);
 		}
-		// センター
+		// center
 		vertices.emplace_back();
-		vertices.back().pos = { 0.0f, 0.0f, -1.0f };
+		vertices.back().pos = { 0.0f,0.0f,-1.0f };
 		const auto iCenter = (unsigned short)(vertices.size() - 1);
 		// 先端
 		vertices.emplace_back();
-		vertices.back().pos = { 0.0f, 0.0f, 1.0f };
+		vertices.back().pos = { 0.0f,0.0f,1.0f };
 		const auto iTip = (unsigned short)(vertices.size() - 1);
 
 
-		// ベースインデックス
+		// base indices
 		std::vector<unsigned short> indices;
 		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
 		{
 			indices.push_back(iCenter);
-			indices.push_back(iLong + 1) % longDiv;
+			indices.push_back((iLong + 1) % longDiv);
 			indices.push_back(iLong);
 		}
 
-		// coneインデックス
+		// cone indices
 		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
 		{
 			indices.push_back(iLong);
-			indices.push_back(iLong + 1) % longDiv;
+			indices.push_back((iLong + 1) % longDiv);
 			indices.push_back(iTip);
 		}
 
-		return { std::move(vertices), std::move(indices) };
+		return { std::move(vertices),std::move(indices) };
 	}
 	template<class V>
 	static CIndexedTriangleList<V> Make()

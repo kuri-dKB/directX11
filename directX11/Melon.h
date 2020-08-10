@@ -1,5 +1,5 @@
 //========================================================================
-// Box.h
+// Melon.h
 // 
 //
 // 更新日：2020/08/09
@@ -8,15 +8,16 @@
 #pragma once
 #include "DrawableBase.h"
 
-class CBox : public CDrawableBase<CBox>
+class CMelon : public CDrawableBase<CMelon>
 {
 public:
-	CBox(CGraphics& gfx, std::mt19937& rng,
+	CMelon(CGraphics& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,
 		std::uniform_real_distribution<float>& rdist,
-		std::uniform_real_distribution<float>& bdist);
+		std::uniform_int_distribution<int>& longdist,
+		std::uniform_int_distribution<int>& latdist);
 	void Update(float dt) noexcept override;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 private:
@@ -28,13 +29,11 @@ private:
 	float theta;
 	float phi;
 	float chi;
-	// スピード(delta/s)
+	// スピード (delta/s)
 	float droll;
 	float dpitch;
 	float dyaw;
 	float dtheta;
 	float dphi;
-	float dchi;		
-	// モデルトランスフォーム
-	DirectX::XMFLOAT3X3 m_mt;
+	float dchi;
 };

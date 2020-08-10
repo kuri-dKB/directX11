@@ -1,5 +1,5 @@
 //========================================================================
-// Box.h
+// Pyramid.h
 // 
 //
 // 更新日：2020/08/09
@@ -8,15 +8,14 @@
 #pragma once
 #include "DrawableBase.h"
 
-class CBox : public CDrawableBase<CBox>
+class CPyramid : public CDrawableBase<CPyramid>
 {
 public:
-	CBox(CGraphics& gfx, std::mt19937& rng,
+	CPyramid(CGraphics& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,
-		std::uniform_real_distribution<float>& rdist,
-		std::uniform_real_distribution<float>& bdist);
+		std::uniform_real_distribution<float>& rdist);
 	void Update(float dt) noexcept override;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 private:
@@ -34,7 +33,5 @@ private:
 	float dyaw;
 	float dtheta;
 	float dphi;
-	float dchi;		
-	// モデルトランスフォーム
-	DirectX::XMFLOAT3X3 m_mt;
+	float dchi;	
 };
