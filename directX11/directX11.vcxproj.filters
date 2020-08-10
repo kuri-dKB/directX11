@@ -147,6 +147,9 @@
     <ClCompile Include="ImguiManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\描画</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliException.h">
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="ImguiManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

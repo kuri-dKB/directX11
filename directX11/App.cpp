@@ -2,7 +2,7 @@
 // App.cpp
 // メイン処理
 //
-// 更新日：2020/08/09
+// 更新日：2020/08/10
 // 栗城 達也
 //========================================================================
 #include "App.h"
@@ -79,13 +79,13 @@ CApp::CApp()
 	std::generate_n(std::back_inserter(m_drawables), nDrawables, f);
 
 	m_wnd.Gfx().SetProjection(dx::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
-	m_wnd.Gfx().SetCamera(dx::XMMatrixTranslation(0.0f, 0.0f, 20.0f));
 }
 
 void CApp::DoFrame()
 {
 	const auto dt = m_timer.Mark() * speed_factor;
 	m_wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	m_wnd.Gfx().SetCamera(m_cam.GetMatrix());
 
 	for (auto& d : m_drawables)
 	{
@@ -98,9 +98,11 @@ void CApp::DoFrame()
 	{
 		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING");
+		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (スペースホールドでポーズ)");
 	}
 	ImGui::End();
+	// カメラコントローラー
+	m_cam.SpawnControlWindow();
 
 	// present
 	m_wnd.Gfx().EndFrame();

@@ -9,6 +9,7 @@
 #include "window.h"
 #include "ChiliTimer.h"
 #include "ImguiManager.h"
+#include "Camera.h"
 
 class CApp
 {
@@ -25,5 +26,6 @@ private:
 	CTimer  m_timer;
 	std::vector < std::unique_ptr<class CDrawable>> m_drawables;
 	float speed_factor = 1.0f;
+	CCamera m_cam;
 	static constexpr size_t nDrawables = 180; // ƒ‚ƒfƒ‹‚ÌŒÂ”
 };
