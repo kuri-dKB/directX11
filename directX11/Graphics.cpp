@@ -12,6 +12,7 @@
 #include <DirectXMath.h>
 #include "GraphicsThrowMacros.h"
 #include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
 
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
@@ -120,6 +121,12 @@ CGraphics::CGraphics(HWND hWnd)
 
 void CGraphics::EndFrame()
 {
+	// imgui frame end
+	if (m_imguiEnabled)
+	{
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
 	HRESULT hr;
 #ifndef NDEBUG
 	m_infoManager.Set();
@@ -137,8 +144,16 @@ void CGraphics::EndFrame()
 	}
 }
 
-void CGraphics::ClearBuffer(float red, float green, float blue) noexcept
+void CGraphics::BeginFrame(float red, float green, float blue) noexcept
 {
+	// imgui begin frame
+	if (m_imguiEnabled)
+	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}
+
 	const float color[] = { red,green,blue,1.0f };
 	m_pContext->ClearRenderTargetView(m_pTarget.Get(), color);
 	m_pContext->ClearDepthStencilView(m_pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
@@ -157,6 +172,21 @@ void CGraphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
 DirectX::XMMATRIX CGraphics::GetProjection() const noexcept
 {
 	return m_projection;
+}
+
+void CGraphics::EnableImgui() noexcept
+{
+	m_imguiEnabled = true;
+}
+
+void CGraphics::DisableImgui() noexcept
+{
+	m_imguiEnabled = false;
+}
+
+bool CGraphics::IsImguiEnabled() const noexcept
+{
+	return m_imguiEnabled;
 }
 
 // ó·äOèàóù
