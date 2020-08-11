@@ -2,7 +2,7 @@
 // Graphics.h
 // 描画系、例外処理
 //
-// 更新日：2020/08/10
+// 更新日：2020/08/11
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -61,7 +61,7 @@ public:
 	CGraphics(HWND hWnd);
 	CGraphics(const CGraphics&) = delete;
 	CGraphics& operator=(const CGraphics&) = delete;
-	~CGraphics() = default;
+	~CGraphics();
 	void EndFrame();
 	void BeginFrame(float red, float green, float blue) noexcept;
 	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);

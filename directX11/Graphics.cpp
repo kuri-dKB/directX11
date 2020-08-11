@@ -1,7 +1,7 @@
 //========================================================================
 // Graphics.cpp
 //
-// 更新日：2020/08/10
+// 更新日：2020/08/11
 // 栗城 達也
 //========================================================================
 #include "Graphics.h"
@@ -117,6 +117,11 @@ CGraphics::CGraphics(HWND hWnd)
 
 	// imgui d3d impl 初期化
 	ImGui_ImplDX11_Init(m_pDevice.Get(), m_pContext.Get());
+}
+
+CGraphics::~CGraphics()
+{
+	ImGui_ImplDX11_Shutdown();
 }
 
 void CGraphics::EndFrame()

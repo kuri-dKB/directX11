@@ -94,11 +94,11 @@ void CApp::DoFrame()
 	}
 
 	// imgui window シュミレーションスピードコントローラー
-	if (ImGui::Begin("シュミレーションスピード"))
+	if (ImGui::Begin("Simulation Speed"))
 	{
 		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (スペースホールドでポーズ)");
+		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
 	}
 	ImGui::End();
 	// カメラコントローラー
