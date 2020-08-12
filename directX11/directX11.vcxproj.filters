@@ -311,6 +311,9 @@
     <ClInclude Include="SolidSphere.h">
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
+    <ClInclude Include="TestObject.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="directX11.rc">
