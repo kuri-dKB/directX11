@@ -61,7 +61,7 @@ void CApp::DoFrame()
 	const auto dt = m_timer.Mark() * speed_factor;
 	m_wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	m_wnd.Gfx().SetCamera(m_cam.GetMatrix());
-	m_light.Bind(m_wnd.Gfx());
+	m_light.Bind(m_wnd.Gfx(), m_cam.GetMatrix());
 
 	for (auto& d : m_drawables)
 	{
@@ -73,7 +73,7 @@ void CApp::DoFrame()
 	// imgui window シュミレーションスピードコントローラー
 	if (ImGui::Begin("Simulation Speed"))
 	{
-		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
+		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 6.0f, "%.4f", 3.2f);
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
 	}
