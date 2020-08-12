@@ -29,7 +29,6 @@ void CPointLight::SpawnControlWindow() noexcept
 		ImGui::SliderFloat("Intensity", &m_cbData.diffuseIntensity, 0.01f, 2.0f, "%.2f", 2);
 		ImGui::ColorEdit3("Diffuse Color", &m_cbData.diffuseColor.x);
 		ImGui::ColorEdit3("Ambient", &m_cbData.ambient.x);
-		ImGui::ColorEdit3("Material", &m_cbData.material.x);
 		// å∏êä
 		ImGui::Text("Falloff");
 		ImGui::SliderFloat("Constant", &m_cbData.attConst, 0.05f, 10.0f, "%.2f", 4);
@@ -48,7 +47,6 @@ void CPointLight::Reset() noexcept
 {
 	m_cbData = {
 		{ 0.0f, 0.0f, 0.0f },
-		{ 0.7f, 0.7f, 0.9f },
 		{ 0.05f, 0.05f, 0.05f },
 		{ 1.0f, 1.0f, 1.0f },
 		1.0f,

@@ -2,18 +2,18 @@
 // TransformCbuf.cpp
 // 
 //
-// 更新日：2020/08/05
+// 更新日：2020/08/12
 // 栗城 達也
 //========================================================================
 #include "TransformCbuf.h"
 
-CTransformCbuf::CTransformCbuf(CGraphics & gfx, const CDrawable & parent)
+CTransformCbuf::CTransformCbuf(CGraphics & gfx, const CDrawable & parent, UINT slot)
 	:
 	m_parent(parent)
 {
 	if (!m_Vcbuf)
 	{
-		m_Vcbuf = std::make_unique<CVertexConstantBuffer<Transforms>>(gfx);
+		m_Vcbuf = std::make_unique<CVertexConstantBuffer<Transforms>>(gfx, slot);
 	}
 }
 

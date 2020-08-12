@@ -2,7 +2,7 @@
 // TransformCbuf.h
 // 
 //
-// 更新日：2020/08/10
+// 更新日：2020/08/12
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -18,7 +18,7 @@ public:
 		DirectX::XMMATRIX modelViewProj;
 		DirectX::XMMATRIX model;
 	};
-	CTransformCbuf(CGraphics& gfx, const CDrawable& parent);
+	CTransformCbuf(CGraphics& gfx, const CDrawable& parent, UINT slot = 0u);
 	void Bind(CGraphics& gfx) noexcept override;
 private:
 	static std::unique_ptr<CVertexConstantBuffer<Transforms>> m_Vcbuf;

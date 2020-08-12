@@ -17,7 +17,8 @@ CBox::CBox(CGraphics& gfx,
 	std::uniform_real_distribution<float>& ddist,
 	std::uniform_real_distribution<float>& odist,
 	std::uniform_real_distribution<float>& rdist,
-	std::uniform_real_distribution<float>& bdist)
+	std::uniform_real_distribution<float>& bdist,
+	DirectX::XMFLOAT3 material)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -67,6 +68,14 @@ CBox::CBox(CGraphics& gfx,
 	}
 
 	AddBind(std::make_unique<CTransformCbuf>(gfx, *this));
+
+	struct PSMaterialConstant
+	{
+		dx::XMFLOAT3 color;
+		float padding;
+	} colorConst;
+	colorConst.color = material;
+	AddBind(std::make_unique<CPixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
 
 	// ƒ‚ƒfƒ‹•ÏŒ`
 	dx::XMStoreFloat3x3(
