@@ -22,10 +22,16 @@ private:
 	struct PointLightCBuf
 	{
 		DirectX::XMFLOAT3 pos;
-		float padding;
+		DirectX::XMFLOAT3 material;
+		DirectX::XMFLOAT3 ambient;
+		DirectX::XMFLOAT3 diffuseColor;
+		float diffuseIntensity;
+		float attConst;
+		float attLin;
+		float attQuad;
 	};
 private:
-	DirectX::XMFLOAT3 m_pos = { 0.0f, 0.0f, 0.0f };
+	PointLightCBuf m_cbData;
 	mutable CSolidSphere m_mesh;
 	mutable CPixelConstantBuffer<PointLightCBuf> m_cbuf;
 };
