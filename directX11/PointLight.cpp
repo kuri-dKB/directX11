@@ -44,4 +44,5 @@ void CPointLight::Draw(CGraphics& gfx) const noexcept(!IS_DEBUG)
 void CPointLight::Bind(CGraphics& gfx) const noexcept
 {
 	m_cbuf.Update(gfx, PointLightCBuf{ m_pos });
+	m_cbuf.Bind(gfx);
 }
