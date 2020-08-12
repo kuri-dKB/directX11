@@ -21,10 +21,10 @@ public:
 private:
 	struct PointLightCBuf
 	{
-		DirectX::XMFLOAT3 pos;
-		DirectX::XMFLOAT3 material;
-		DirectX::XMFLOAT3 ambient;
-		DirectX::XMFLOAT3 diffuseColor;
+		alignas(16) DirectX::XMFLOAT3 pos; // シェーダ側とバイト数を合わせる
+		alignas(16) DirectX::XMFLOAT3 material;
+		alignas(16) DirectX::XMFLOAT3 ambient;
+		alignas(16) DirectX::XMFLOAT3 diffuseColor;
 		float diffuseIntensity;
 		float attConst;
 		float attLin;
