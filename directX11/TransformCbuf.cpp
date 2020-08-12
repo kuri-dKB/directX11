@@ -19,13 +19,12 @@ CTransformCbuf::CTransformCbuf(CGraphics & gfx, const CDrawable & parent, UINT s
 
 void CTransformCbuf::Bind(CGraphics & gfx) noexcept
 {
-	const auto model = m_parent.GetTransformXM();
+	const auto modelView = m_parent.GetTransformXM() * gfx.GetCamera();
 	const Transforms tf =
 	{
-		DirectX::XMMatrixTranspose(model),
+		DirectX::XMMatrixTranspose(modelView),
 		DirectX::XMMatrixTranspose(
-			model *
-			gfx.GetCamera() *
+			modelView *
 			gfx.GetProjection()
 		)
 	};
