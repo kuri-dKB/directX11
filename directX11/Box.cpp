@@ -2,7 +2,7 @@
 // Box.cpp
 // 
 //
-// 更新日：2020/08/09
+// 更新日：2020/08/12
 // 栗城 達也
 //========================================================================
 #include "Box.h"
@@ -37,47 +37,31 @@ CBox::CBox(CGraphics& gfx,
 		struct Vertex
 		{
 			dx::XMFLOAT3 pos;
+			dx::XMFLOAT3 n;
 		};
-		const auto model = CCube::Make<Vertex>();
+		auto model = CCube::MakeIndependent<Vertex>();
+		model.SetNormalsIndependentFlat();
 
 		AddStaticBind(std::make_unique<CVertexBuffer>(gfx, model.m_vertices));
 
-		auto pvs = std::make_unique<CVertexShader>(gfx, L"ColorIndexVS.cso");
+		auto pvs = std::make_unique<CVertexShader>(gfx, L"PhongVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<CPixelShader>(gfx, L"ColorIndexPS.cso"));
+		AddStaticBind(std::make_unique<CPixelShader>(gfx, L"PhongPS.cso"));
 
 		AddStaticIndexBuffer(std::make_unique<CIndexBuffer>(gfx, model.m_indices));
 
-		struct PixelShaderConstants
+		struct PSLightConstants
 		{
-			struct
-			{
-				float r;
-				float g;
-				float b;
-				float a;
-			} face_colors[8];
+			dx::XMVECTOR pos;	
 		};
-		const PixelShaderConstants cb2 =
-		{
-			{
-				{ 1.0f,1.0f,1.0f },
-				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,1.0f,0.0f },
-				{ 1.0f,1.0f,0.0f },
-				{ 0.0f,0.0f,1.0f },
-				{ 1.0f,0.0f,1.0f },
-				{ 0.0f,1.0f,1.0f },
-				{ 0.0f,0.0f,0.0f },
-			}
-		};
-		AddStaticBind(std::make_unique<CPixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
+		AddStaticBind(std::make_unique<CPixelConstantBuffer<PSLightConstants>>(gfx));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{"Normal", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		};
 		AddStaticBind(std::make_unique<CInputLayout>(gfx, ied, pvsbc));
 

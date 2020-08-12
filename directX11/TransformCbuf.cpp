@@ -13,19 +13,24 @@ CTransformCbuf::CTransformCbuf(CGraphics & gfx, const CDrawable & parent)
 {
 	if (!m_Vcbuf)
 	{
-		m_Vcbuf = std::make_unique<CVertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
+		m_Vcbuf = std::make_unique<CVertexConstantBuffer<Transforms>>(gfx);
 	}
 }
 
 void CTransformCbuf::Bind(CGraphics & gfx) noexcept
 {
-	m_Vcbuf->Update(gfx,
+	const auto model = m_parent.GetTransformXM();
+	const Transforms tf =
+	{
+		DirectX::XMMatrixTranspose(model),
 		DirectX::XMMatrixTranspose(
-			m_parent.GetTransformXM() *
+			model *
 			gfx.GetCamera() *
 			gfx.GetProjection()
-		));
+		)
+	};
+	m_Vcbuf->Update(gfx, tf);
 	m_Vcbuf->Bind(gfx);
 }
 
-std::unique_ptr<CVertexConstantBuffer<DirectX::XMMATRIX>> CTransformCbuf::m_Vcbuf;
+std::unique_ptr<CVertexConstantBuffer<CTransformCbuf::Transforms>> CTransformCbuf::m_Vcbuf;

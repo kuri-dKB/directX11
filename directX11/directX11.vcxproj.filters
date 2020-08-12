@@ -108,9 +108,6 @@
     <ClCompile Include="Pyramid.cpp">
       <Filter>ソース ファイル\描画</Filter>
     </ClCompile>
-    <ClCompile Include="Melon.cpp">
-      <Filter>ソース ファイル\描画</Filter>
-    </ClCompile>
     <ClCompile Include="Surface.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -148,6 +145,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\描画</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidSphere.cpp">
+      <Filter>ソース ファイル\描画</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
       <Filter>ソース ファイル\描画</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,9 +260,6 @@
     <ClInclude Include="Pyramid.h">
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
-    <ClInclude Include="Melon.h">
-      <Filter>ヘッダー ファイル\描画</Filter>
-    </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -305,6 +305,12 @@
     <ClInclude Include="Camera.h">
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidSphere.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="directX11.rc">
@@ -334,16 +340,22 @@
     <FxCompile Include="ColorBlendVS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
-    <FxCompile Include="ColorIndexPS.hlsl">
-      <Filter>シェーダー</Filter>
-    </FxCompile>
-    <FxCompile Include="ColorIndexVS.hlsl">
-      <Filter>シェーダー</Filter>
-    </FxCompile>
     <FxCompile Include="TexturePS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
     <FxCompile Include="TextureVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="SolidPS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="SolidVS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
   </ItemGroup>

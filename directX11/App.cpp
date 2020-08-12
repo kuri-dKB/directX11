@@ -2,14 +2,11 @@
 // App.cpp
 // メイン処理
 //
-// 更新日：2020/08/10
+// 更新日：2020/08/12
 // 栗城 達也
 //========================================================================
 #include "App.h"
-#include "Melon.h"
-#include "Pyramid.h"
 #include "Box.h"
-#include "Sheet.h"
 #include <memory>
 #include <algorithm>
 #include "ChiliMath.h"
@@ -23,7 +20,8 @@ CGDIPlusManager g_gdipm;
 
 CApp::CApp()
 	:
-	m_wnd(800, 600, "実験")
+	m_wnd(800, 600, "実験"),
+	m_light(m_wnd.Gfx())
 {
 	class Factory
 	{
@@ -34,32 +32,10 @@ CApp::CApp()
 		{}
 		std::unique_ptr<CDrawable> operator()()
 		{
-			switch (typedist(rng))
-			{
-			case 0:
-				return std::make_unique<CPyramid>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			case 1:
-				return std::make_unique<CBox>(
-					gfx, rng, adist, ddist,
-					odist, rdist, bdist
-					);
-			case 2:
-				return std::make_unique<CMelon>(
-					gfx, rng, adist, ddist,
-					odist, rdist, longdist, latdist
-					);
-			case 3:
-				return std::make_unique<CSheet>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			default:
-				assert(false && "ファクトリのタイプとあってないよ");
-				return {};
-			}
+			return std::make_unique<CBox>(
+				gfx, rng, adist, ddist,
+				odist, rdist, bdist
+				);
 		}
 	private:
 		CGraphics& gfx;
@@ -69,9 +45,6 @@ CApp::CApp()
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
-		std::uniform_int_distribution<int> latdist{ 5,20 };
-		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,3 };
 	};
 
 	Factory f(m_wnd.Gfx());
@@ -86,12 +59,14 @@ void CApp::DoFrame()
 	const auto dt = m_timer.Mark() * speed_factor;
 	m_wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	m_wnd.Gfx().SetCamera(m_cam.GetMatrix());
+	m_light.Bind(m_wnd.Gfx());
 
 	for (auto& d : m_drawables)
 	{
 		d->Update(m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(m_wnd.Gfx());
 	}
+	m_light.Draw(m_wnd.Gfx());
 
 	// imgui window シュミレーションスピードコントローラー
 	if (ImGui::Begin("Simulation Speed"))
@@ -101,8 +76,9 @@ void CApp::DoFrame()
 		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
 	}
 	ImGui::End();
-	// カメラコントローラー
+	// カメラ、ライトコントローラー
 	m_cam.SpawnControlWindow();
+	m_light.SpawnControlWindow();
 
 	// present
 	m_wnd.Gfx().EndFrame();
