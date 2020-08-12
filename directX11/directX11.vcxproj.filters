@@ -153,6 +153,9 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>ソース ファイル\描画</Filter>
     </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>ソース ファイル\描画</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliException.h">
@@ -314,6 +317,9 @@
     <ClInclude Include="TestObject.h">
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="directX11.rc">
@@ -359,6 +365,9 @@
       <Filter>シェーダー</Filter>
     </FxCompile>
     <FxCompile Include="SolidVS.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="IndexedPhongPS.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
   </ItemGroup>

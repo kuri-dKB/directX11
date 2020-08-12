@@ -2,14 +2,13 @@
 // Drawable.cpp
 // 
 //
-// 更新日：2020/08/05
+// 更新日：2020/08/12
 // 栗城 達也
 //========================================================================
 #include "Drawable.h"
 #include "GraphicsThrowMacros.h"
 #include "IndexBuffer.h"
 #include <cassert>
-#include <typeinfo>
 
 void CDrawable::Draw(CGraphics & gfx) const noexcept(!IS_DEBUG)
 {
