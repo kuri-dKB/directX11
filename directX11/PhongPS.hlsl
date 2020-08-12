@@ -22,5 +22,5 @@ float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
 	// 拡散強度
 	const float3 diffuse = diffuseColor * diffuseIntensity * att * max(0.0f, dot(dirToL, n));
 	// 最終的な色
-	return float4(saturate(diffuse + ambient), 1.0f);
+	return float4(saturate((diffuse + ambient) * materialColor), 1.0f);
 }
