@@ -156,6 +156,9 @@
     <ClCompile Include="Cylinder.cpp">
       <Filter>ソース ファイル\描画</Filter>
     </ClCompile>
+    <ClCompile Include="SkinnedBox.cpp">
+      <Filter>ソース ファイル\描画</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliException.h">
@@ -318,6 +321,9 @@
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
     <ClInclude Include="Cylinder.h">
+      <Filter>ヘッダー ファイル\描画</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinnedBox.h">
       <Filter>ヘッダー ファイル\描画</Filter>
     </ClInclude>
   </ItemGroup>

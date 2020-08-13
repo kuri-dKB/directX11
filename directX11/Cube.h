@@ -2,7 +2,7 @@
 // Cube.h
 // 
 //
-// 更新日：2020/08/10
+// 更新日：2020/08/13
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -30,9 +30,8 @@ public:
 		vertices[6].pos = { -side,side,side };
 		vertices[7].pos = { side,side,side };
 
-		return {
-			std::move(vertices),
-			{
+		return{
+			std::move(vertices),{
 				0,2,1, 2,3,1,
 				1,3,5, 3,7,5,
 				2,6,3, 3,6,7,
@@ -81,7 +80,7 @@ public:
 		vertices[13].tex = { 0.0f / 3.0f,2.0f / 4.0f };
 
 		return{
-			std::move(vertices), {
+			std::move(vertices),{
 				0,2,1,   2,3,1,
 				4,8,5,   5,8,9,
 				2,6,3,   3,6,7,
@@ -132,5 +131,37 @@ public:
 				20,23,21, 20,22,23
 			}
 		};
+	}
+	template<class V>
+	static CIndexedTriangleList<V> MakeIndependentTextured()
+	{
+		auto itl = MakeIndependent<V>();
+
+		itl.m_vertices[0].tc = { 0.0f,0.0f };
+		itl.m_vertices[1].tc = { 1.0f,0.0f };
+		itl.m_vertices[2].tc = { 0.0f,1.0f };
+		itl.m_vertices[3].tc = { 1.0f,1.0f };
+		itl.m_vertices[4].tc = { 0.0f,0.0f };
+		itl.m_vertices[5].tc = { 1.0f,0.0f };
+		itl.m_vertices[6].tc = { 0.0f,1.0f };
+		itl.m_vertices[7].tc = { 1.0f,1.0f };
+		itl.m_vertices[8].tc = { 0.0f,0.0f };
+		itl.m_vertices[9].tc = { 1.0f,0.0f };
+		itl.m_vertices[10].tc = { 0.0f,1.0f };
+		itl.m_vertices[11].tc = { 1.0f,1.0f };
+		itl.m_vertices[12].tc = { 0.0f,0.0f };
+		itl.m_vertices[13].tc = { 1.0f,0.0f };
+		itl.m_vertices[14].tc = { 0.0f,1.0f };
+		itl.m_vertices[15].tc = { 1.0f,1.0f };
+		itl.m_vertices[16].tc = { 0.0f,0.0f };
+		itl.m_vertices[17].tc = { 1.0f,0.0f };
+		itl.m_vertices[18].tc = { 0.0f,1.0f };
+		itl.m_vertices[19].tc = { 1.0f,1.0f };
+		itl.m_vertices[20].tc = { 0.0f,0.0f };
+		itl.m_vertices[21].tc = { 1.0f,0.0f };
+		itl.m_vertices[22].tc = { 0.0f,1.0f };
+		itl.m_vertices[23].tc = { 1.0f,1.0f };
+
+		return itl;
 	}
 };
