@@ -25,38 +25,11 @@ CPyramid::CPyramid(CGraphics& gfx, std::mt19937& rng,
 
 	if (!IsStaticInit())
 	{
-		struct Vertex
-		{
-			dx::XMFLOAT3 pos;
-			dx::XMFLOAT3 n;
-			std::array<char, 4> color;
-			char padding;
-		};
-		const auto tesselation = tdist(rng);
-		auto model = CCone::MakeTesselatedIndependentFaces<Vertex>(tesselation);
-		// êF
-		for (auto& v : model.m_vertices)
-		{
-			v.color = { (char)10, (char)10, (char)255 };
-		}
-		for (int i = 0; i < tesselation; i++)
-		{
-			model.m_vertices[i * 3].color = { (char)255, (char)10, (char)10 }; // êÊí[
-		}
-		// Zé≤ï˚å¸Ç…è≠ÇµêLÇŒÇ∑
-		model.Transform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
-		// ÉmÅ[É}Éã
-		model.SetNormalsIndependentFlat();
-
-		AddStaticBind(std::make_unique<CVertexBuffer>(gfx, model.m_vertices));
-
 		auto pvs = std::make_unique<CVertexShader>(gfx, L"BlendedPhongVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
 		AddStaticBind(std::make_unique<CPixelShader>(gfx, L"BlendedPhongPS.cso"));
-
-		AddStaticIndexBuffer(std::make_unique<CIndexBuffer>(gfx, model.m_indices));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
@@ -76,10 +49,32 @@ CPyramid::CPyramid(CGraphics& gfx, std::mt19937& rng,
 		}colorConst;
 		AddStaticBind(std::make_unique<CPixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
 	}
-	else
+	
+	struct Vertex
 	{
-		SetIndexFromStatic();
+		dx::XMFLOAT3 pos;
+		dx::XMFLOAT3 n;
+		std::array<char, 4> color;
+		char padding;
+	};
+	const auto tesselation = tdist(rng);
+	auto model = CCone::MakeTesselatedIndependentFaces<Vertex>(tesselation);
+	// êF
+	for (auto& v : model.m_vertices)
+	{
+		v.color = { (char)10, (char)10, (char)255 };
 	}
+	for (int i = 0; i < tesselation; i++)
+	{
+		model.m_vertices[i * 3].color = { (char)255, (char)10, (char)10 }; // êÊí[
+	}
+	// Zé≤ï˚å¸Ç…è≠ÇµêLÇŒÇ∑
+	model.Transform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
+	// ÉmÅ[É}Éã
+	model.SetNormalsIndependentFlat();
+
+	AddBind(std::make_unique<CVertexBuffer>(gfx, model.m_vertices));
+	AddIndexBuffer(std::make_unique<CIndexBuffer>(gfx, model.m_indices));
 
 	AddBind(std::make_unique<CTransformCbuf>(gfx, *this));
 }
