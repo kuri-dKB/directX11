@@ -2,7 +2,7 @@
 // TestObject.h
 // 
 //
-// 更新日：2020/08/12
+// 更新日：2020/08/14
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -45,7 +45,7 @@ public:
 			dx::XMMatrixTranslation(r, 0.0f, 0.0f) *
 			dx::XMMatrixRotationRollPitchYaw(theta, phi, chi);
 	}
-private:
+protected:
 	// 位置
 	float r;
 	float roll = 0.0f;
