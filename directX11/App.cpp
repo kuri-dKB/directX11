@@ -119,7 +119,39 @@ void CApp::DoFrame()
 	m_cam.SpawnControlWindow();
 	m_light.SpawnControlWindow();
 	// Boxのコントローラー
-	m_boxes.front()->SpawnControlerWindow(69, m_wnd.Gfx());
+	if (ImGui::Begin("Boxes"))
+	{
+		using namespace std::string_literals;
+		const auto preview = m_comboBoxIndex ? std::to_string(*m_comboBoxIndex) : "Choose a Box..."s;
+		if (ImGui::BeginCombo("Box Number", preview.c_str()))
+		{
+			for (int i = 0; i < m_boxes.size(); i++)
+			{
+				const bool selected = *m_comboBoxIndex == i;
+				if (ImGui::Selectable(std::to_string(i).c_str(), selected))
+				{
+					m_comboBoxIndex = i;
+				}
+				if (selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+		if (ImGui::Button("Spawn Control Window") && m_comboBoxIndex)
+		{
+			m_boxControlIds.insert(*m_comboBoxIndex);
+			m_comboBoxIndex.reset();
+		}
+	}
+	ImGui::End();
+	// Box属性コントローラー
+	for (auto id : m_boxControlIds)
+	{
+		m_boxes[id]->SpawnControlerWindow(id, m_wnd.Gfx());
+	}
+
 
 	// present
 	m_wnd.Gfx().EndFrame();

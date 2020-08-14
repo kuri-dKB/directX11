@@ -11,6 +11,7 @@
 #include "ImguiManager.h"
 #include "Camera.h"
 #include "PointLight.h"
+#include <set>
 
 class CApp
 {
@@ -31,4 +32,6 @@ private:
 	CCamera m_cam;
 	CPointLight m_light;
 	static constexpr size_t nDrawables = 180; // ƒ‚ƒfƒ‹‚ÌŒÂ”
+	std::optional<int> m_comboBoxIndex;
+	std::set<int> m_boxControlIds;
 };
