@@ -100,6 +100,7 @@ void CApp::DoFrame()
 	m_wnd.Gfx().SetCamera(m_cam.GetMatrix());
 	m_light.Bind(m_wnd.Gfx(), m_cam.GetMatrix());
 
+	// render geometry
 	for (auto& d : m_drawables)
 	{
 		d->Update(m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
@@ -107,6 +108,19 @@ void CApp::DoFrame()
 	}
 	m_light.Draw(m_wnd.Gfx());
 
+	// imgui window
+	SpawnSimulationWindow();
+	m_cam.SpawnControlWindow();
+	m_light.SpawnControlWindow();
+	SpawnBoxWindowManagerWindow();
+	SpawnBoxWindows();
+
+	// present
+	m_wnd.Gfx().EndFrame();
+}
+
+void CApp::SpawnSimulationWindow() noexcept
+{
 	// imgui window シュミレーションスピードコントローラー
 	if (ImGui::Begin("Simulation Speed"))
 	{
@@ -115,9 +129,10 @@ void CApp::DoFrame()
 		ImGui::Text("Status: %s", m_wnd.m_kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
 	}
 	ImGui::End();
-	// カメラ、ライトコントローラー
-	m_cam.SpawnControlWindow();
-	m_light.SpawnControlWindow();
+}
+
+void CApp::SpawnBoxWindowManagerWindow() noexcept
+{
 	// Boxのコントローラー
 	if (ImGui::Begin("Boxes"))
 	{
@@ -146,15 +161,15 @@ void CApp::DoFrame()
 		}
 	}
 	ImGui::End();
+}
+
+void CApp::SpawnBoxWindows() noexcept
+{
 	// Box属性コントローラー
 	for (auto id : m_boxControlIds)
 	{
 		m_boxes[id]->SpawnControlerWindow(id, m_wnd.Gfx());
 	}
-
-
-	// present
-	m_wnd.Gfx().EndFrame();
 }
 
 CApp::~CApp()

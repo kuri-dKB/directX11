@@ -22,6 +22,9 @@ public:
 	~CApp();
 private:
 	void DoFrame();
+	void SpawnSimulationWindow() noexcept;
+	void SpawnBoxWindowManagerWindow() noexcept;
+	void SpawnBoxWindows() noexcept;
 private:
 	CImguiManager m_imgui;
 	CWindow m_wnd;
