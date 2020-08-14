@@ -78,9 +78,17 @@ CApp::CApp()
 		std::uniform_int_distribution<int> tdist{ 3, 30 };
 	};
 
-	Factory f(m_wnd.Gfx());
 	m_drawables.reserve(nDrawables);
-	std::generate_n(std::back_inserter(m_drawables), nDrawables, f);
+	std::generate_n(std::back_inserter(m_drawables), nDrawables, Factory{ m_wnd.Gfx() });
+
+	// パラメータ編集用のBoxポインタを初期化
+	for (auto& pd : m_drawables)
+	{
+		if (auto pb = dynamic_cast<CBox*>(pd.get()))
+		{
+			m_boxes.push_back(pb);
+		}
+	}
 
 	m_wnd.Gfx().SetProjection(dx::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
@@ -110,6 +118,8 @@ void CApp::DoFrame()
 	// カメラ、ライトコントローラー
 	m_cam.SpawnControlWindow();
 	m_light.SpawnControlWindow();
+	// Boxのコントローラー
+	m_boxes.front()->SpawnControlerWindow(69, m_wnd.Gfx());
 
 	// present
 	m_wnd.Gfx().EndFrame();

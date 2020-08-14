@@ -2,11 +2,12 @@
 // Box.h
 // 
 //
-// 更新日：2020/08/12
+// 更新日：2020/08/14
 // 栗城 達也
 //========================================================================
 #pragma once
 #include "TestObject.h"
+#include "ConstantBuffers.h"
 
 class CBox : public CTestObject<CBox>
 {
@@ -19,6 +20,18 @@ public:
 		std::uniform_real_distribution<float>& bdist,
 		DirectX::XMFLOAT3 material);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
+	void SpawnControlerWindow(int id, CGraphics& gfx) noexcept;
+private:
+	void SyncMaterial(CGraphics& gfx) noexcept(!IS_DEBUG);
+private:
+	struct PSMaterialConstant
+	{
+		DirectX::XMFLOAT3 color;
+		float specularIntensity = 0.6f;
+		float specularPower = 30.0f;
+		float padding[3];
+	} materialConstants;
+	using MaterialCBuf = CPixelConstantBuffer<PSMaterialConstant>;
 private:
 	// モデルトランスフォーム
 	DirectX::XMFLOAT3X3 m_mt;

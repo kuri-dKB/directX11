@@ -2,7 +2,7 @@
 // App.h
 // メイン処理
 //
-// 更新日：2020/08/12
+// 更新日：2020/08/14
 // 栗城 達也
 //========================================================================
 #pragma once
@@ -26,6 +26,7 @@ private:
 	CWindow m_wnd;
 	CTimer  m_timer;
 	std::vector < std::unique_ptr<class CDrawable>> m_drawables;
+	std::vector<class CBox*> m_boxes;
 	float speed_factor = 1.0f;
 	CCamera m_cam;
 	CPointLight m_light;

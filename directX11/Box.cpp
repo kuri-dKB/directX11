@@ -2,13 +2,14 @@
 // Box.cpp
 // 
 //
-// 更新日：2020/08/12
+// 更新日：2020/08/14
 // 栗城 達也
 //========================================================================
 #include "Box.h"
 #include "BindableBase.h"
 #include "GraphicsThrowMacros.h"
 #include "Cube.h"
+#include "imgui/imgui.h"
 
 
 CBox::CBox(CGraphics& gfx,
@@ -60,15 +61,8 @@ CBox::CBox(CGraphics& gfx,
 
 	AddBind(std::make_unique<CTransformCbuf>(gfx, *this));
 
-	struct PSMaterialConstant
-	{
-		dx::XMFLOAT3 color;
-		float specularIntensity = 0.6f;
-		float specularPower = 30.0f;
-		float padding[3];
-	} colorConst;
-	colorConst.color = material;
-	AddBind(std::make_unique<CPixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
+	materialConstants.color = material;
+	AddBind(std::make_unique<MaterialCBuf>(gfx, materialConstants, 1u));
 
 	// モデル変形
 	dx::XMStoreFloat3x3(
@@ -81,4 +75,30 @@ DirectX::XMMATRIX CBox::GetTransformXM() const noexcept
 {
 	namespace dx = DirectX;
 	return dx::XMLoadFloat3x3(&m_mt) * CTestObject::GetTransformXM();
+}
+
+void CBox::SpawnControlerWindow(int id, CGraphics& gfx) noexcept
+{
+	using namespace std::string_literals;
+
+	bool dirty = false;
+	if (ImGui::Begin(("Box"s + std::to_string(id)).c_str()));
+	{
+		dirty = dirty || ImGui::ColorEdit3("Material Color", &materialConstants.color.x);
+		dirty = dirty || ImGui::SliderFloat("Specular Intensity", &materialConstants.specularIntensity, 0.05, 4.0f, "%.2f", 2);
+		dirty = dirty || ImGui::SliderFloat("Specular Power", &materialConstants.specularPower, 1.0f, 200.0f, "%.2f", 2);
+	}
+	ImGui::End();
+
+	if (dirty)
+	{
+		SyncMaterial(gfx);
+	}
+}
+
+void CBox::SyncMaterial(CGraphics& gfx) noexcept(!IS_DEBUG)
+{
+	auto pConstPS = QueryBindable<MaterialCBuf>();
+	assert(pConstPS != nullptr);
+	pConstPS->Update(gfx, materialConstants);
 }
