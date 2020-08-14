@@ -165,10 +165,16 @@ void CApp::SpawnBoxWindowManagerWindow() noexcept
 
 void CApp::SpawnBoxWindows() noexcept
 {
-	// Box属性コントローラー
-	for (auto id : m_boxControlIds)
+	for (auto i = m_boxControlIds.begin(); i != m_boxControlIds.end();)
 	{
-		m_boxes[id]->SpawnControlerWindow(id, m_wnd.Gfx());
+		if (!m_boxes[*i]->SpawnControlerWindow(*i, m_wnd.Gfx()))
+		{
+			i = m_boxControlIds.erase(i);
+		}
+		else
+		{
+			i++;
+		}
 	}
 }
 

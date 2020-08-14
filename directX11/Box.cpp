@@ -77,12 +77,13 @@ DirectX::XMMATRIX CBox::GetTransformXM() const noexcept
 	return dx::XMLoadFloat3x3(&m_mt) * CTestObject::GetTransformXM();
 }
 
-void CBox::SpawnControlerWindow(int id, CGraphics& gfx) noexcept
+bool CBox::SpawnControlerWindow(int id, CGraphics& gfx) noexcept
 {
 	using namespace std::string_literals;
 
 	bool dirty = false;
-	if (ImGui::Begin(("Box"s + std::to_string(id)).c_str()));
+	bool open = true;
+	if (ImGui::Begin(("Box"s + std::to_string(id)).c_str(), &open));
 	{
 		const auto cd = ImGui::ColorEdit3("Material Color", &materialConstants.color.x);
 		const auto sid = ImGui::SliderFloat("Specular Intensity", &materialConstants.specularIntensity, 0.05, 4.0f, "%.2f", 2);
@@ -95,6 +96,7 @@ void CBox::SpawnControlerWindow(int id, CGraphics& gfx) noexcept
 	{
 		SyncMaterial(gfx);
 	}
+	return open;
 }
 
 void CBox::SyncMaterial(CGraphics& gfx) noexcept(!IS_DEBUG)
