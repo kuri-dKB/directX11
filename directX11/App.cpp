@@ -2,13 +2,14 @@
 // App.cpp
 // メイン処理
 //
-// 更新日：2020/08/12
+// 更新日：2020/08/14
 // 栗城 達也
 //========================================================================
 #include "App.h"
 #include "Box.h"
 #include "Cylinder.h"
 #include "Pyramid.h"
+#include "SkinnedBox.h"
 #include <memory>
 #include <algorithm>
 #include "ChiliMath.h"
@@ -53,6 +54,12 @@ CApp::CApp()
 					gfx, rng, adist, ddist, odist,
 					rdist, tdist
 					);
+			case 3:
+				return std::make_unique<CSkinnedBox>(
+					gfx, rng, adist, ddist, odist,
+					rdist
+					);
+
 			default:
 				assert(false && "Factoryで描画できないのがあるよ");
 				return {};
@@ -61,7 +68,7 @@ CApp::CApp()
 	private:
 		CGraphics& gfx;
 		std::mt19937 rng{ std::random_device{}() };
-		std::uniform_int_distribution<int> sdist{ 0, 2 };
+		std::uniform_int_distribution<int> sdist{ 0, 3 };
 		std::uniform_real_distribution<float> adist{ 0.0f,PI * 2.0f };
 		std::uniform_real_distribution<float> ddist{ 0.0f,PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
