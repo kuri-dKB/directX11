@@ -23,7 +23,7 @@ CGDIPlusManager g_gdipm;
 
 CApp::CApp()
 	:
-	m_wnd(800, 600, "ŽÀŒ±"),
+	m_wnd(832, 624, "ŽÀŒ±"),
 	m_light(m_wnd.Gfx())
 {
 	class Factory
