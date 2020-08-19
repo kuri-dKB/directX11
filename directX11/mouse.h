@@ -110,7 +110,7 @@ private:
 	void TrimBuffer() noexcept; // バッファのトリミング
 	void OnWheelDelta(int x, int y, int delta) noexcept;
 private:
-	static constexpr unsigned int m_bufferSize = 16u; // "数字u"は符号なし整数の意   constexpr -> https://docs.microsoft.com/ja-jp/cpp/cpp/constexpr-cpp?view=vs-2019
+	static constexpr unsigned int m_bufferSize = 16u; // constexpr -> https://docs.microsoft.com/ja-jp/cpp/cpp/constexpr-cpp?view=vs-2019
 	int  m_x;
 	int  m_y;
 	bool m_leftIsPressed = false;

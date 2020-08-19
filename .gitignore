@@ -51,6 +51,7 @@ artifacts/
 *.ilk
 *.meta
 *.obj
+!directX11/Models/*.obj
 *.pch
 *.pdb
 *.pgc
